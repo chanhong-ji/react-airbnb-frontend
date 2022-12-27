@@ -24,14 +24,20 @@ export default function Header() {
   } = useDisclosure();
 
   return (
-    <HStack justify={'space-between'} px={10} py={5} borderBottomWidth={1}>
+    <HStack
+      width={'full'}
+      justify={{ base: 'center', sm: 'center', md: 'space-between' }}
+      px={20}
+      py={5}
+      borderBottomWidth={1}
+    >
       <Link to={'/'}>
-        <Center color={'red'}>
+        <Center>
           <FaAirbnb fontSize={'48'} />
         </Center>
       </Link>
 
-      <HStack>
+      <HStack display={{ base: 'none', sm: 'none', md: 'flex' }}>
         <ColorModeSwitcher />
         <Button onClick={onLoginOpen}>Login</Button>
         <LightMode>
