@@ -51,3 +51,13 @@ export interface IReview {
     user: IPublicUser;
     created_at: string;
 }
+
+export interface IMeUser {
+    username: string;
+    email: string;
+    name: string;
+    avatar?: string;
+    gender: string;
+    language: string;
+    currency: string;
+}

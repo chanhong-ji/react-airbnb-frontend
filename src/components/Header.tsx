@@ -1,4 +1,5 @@
 import {
+    Avatar,
     Button,
     Center,
     HStack,
@@ -10,8 +11,10 @@ import { Link } from "react-router-dom";
 import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
+import useMeUser from "../lib/useMeUser";
 
 export default function Header() {
+    const { meLoading, meUser, isLoggedIn } = useMeUser();
     const {
         isOpen: isLoginOpen,
         onOpen: onLoginOpen,
@@ -34,22 +37,29 @@ export default function Header() {
             top={-1}
             left={-1}
         >
+            {/* Logo */}
             <Link to={"/"}>
                 <Center>
                     <FaAirbnb fontSize={"48"} />
                 </Center>
             </Link>
 
-            <HStack display={{ base: "none", sm: "none", md: "flex" }}>
-                <ColorModeSwitcher />
-                <Button onClick={onLoginOpen}>Login</Button>
-                <LightMode>
-                    <Button colorScheme={"red"} onClick={onSignupOpen}>
-                        Sign up
-                    </Button>
-                </LightMode>
-            </HStack>
+            {/* Buttons */}
+            {meLoading && isLoggedIn ? (
+                <Avatar src={meUser?.avatar} name={meUser?.username} />
+            ) : (
+                <HStack display={{ base: "none", sm: "none", md: "flex" }}>
+                    <ColorModeSwitcher />
+                    <Button onClick={onLoginOpen}>Login</Button>
+                    <LightMode>
+                        <Button colorScheme={"red"} onClick={onSignupOpen}>
+                            Sign up
+                        </Button>
+                    </LightMode>
+                </HStack>
+            )}
 
+            {/* Modal */}
             <LoginModal isOpen={isLoginOpen} onClose={onLoginClose} />
             <SignupModal isOpen={isSignupOpen} onClose={onSignupClose} />
         </HStack>
