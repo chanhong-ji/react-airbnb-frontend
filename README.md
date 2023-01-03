@@ -11,6 +11,7 @@
 
 - [x] Home
 - [x] RoomDetail
+- [x] SocialConfirm page
 
 ### Component
 
@@ -19,3 +20,4 @@
 - [x] Reveiw
 - [x] Reviews
 - [x] Logout
+- [x] SocialLogin

@@ -1,6 +1,5 @@
 import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router";
@@ -13,13 +12,11 @@ const root = ReactDOM.createRoot(container);
 const queryClient = new QueryClient();
 
 root.render(
-    <React.StrictMode>
-        <QueryClientProvider client={queryClient}>
-            <ReactQueryDevtools />
-            <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-            <ChakraProvider theme={theme}>
-                <RouterProvider router={router} />
-            </ChakraProvider>
-        </QueryClientProvider>
-    </React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools />
+        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+        <ChakraProvider theme={theme}>
+            <RouterProvider router={router} />
+        </ChakraProvider>
+    </QueryClientProvider>
 );

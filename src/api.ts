@@ -8,6 +8,13 @@ const instance = axios.create({
     withCredentials: true,
 });
 
+const getCsrfHeader = () => {
+    const csrfToken = Cookie.get("csrftoken");
+    return {
+        "X-CSRFToken": csrfToken,
+    };
+};
+
 export const getRooms = () => instance.get("rooms/").then((res) => res.data);
 
 export const getRoom = ({ queryKey }: QueryFunctionContext) => {
@@ -21,16 +28,52 @@ export const getRoomReviews = ({ queryKey }: QueryFunctionContext) => {
 };
 
 export const getMeUser = () => {
-    return instance.get("users/me").then((res) => res.data);
+    return instance
+        .get("users/me")
+        .then((res) => res.data)
+        .catch((error) => null);
 };
 
 export const getLogout = () => {
-    const csrfToken = Cookie.get("csrftoken");
     return instance
         .post("users/logout", null, {
             headers: {
-                "X-CSRFToken": csrfToken,
+                ...getCsrfHeader(),
             },
         })
         .then((res) => res.data);
 };
+
+export const getGithubLogin = (code: string) =>
+    instance
+        .post(
+            "users/github",
+            { code },
+            {
+                headers: {
+                    ...getCsrfHeader(),
+                },
+            }
+        )
+        .then((res) => ({ status: res.status, data: res.data }))
+        .catch((error) => {
+            const response = error.response;
+            return { status: response.status, data: response.data };
+        });
+
+export const getKakaoLogin = (code: string) =>
+    instance
+        .post(
+            "users/kakao",
+            { code },
+            {
+                headers: {
+                    ...getCsrfHeader(),
+                },
+            }
+        )
+        .then((res) => ({ status: res.status, data: res.data }))
+        .catch((error) => {
+            const response = error.response;
+            return { status: response.status, data: response.data };
+        });
