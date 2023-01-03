@@ -3,6 +3,10 @@
 - [x] Signup Modal layout
 - [x] Social Login layout
 
+### Settings
+
+- [x] Cors
+
 ### Page
 
 - [x] Home
@@ -14,3 +18,4 @@
 - [x] RoomSkeleton
 - [x] Reveiw
 - [x] Reviews
+- [x] Logout

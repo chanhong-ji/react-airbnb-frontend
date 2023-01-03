@@ -5,6 +5,15 @@ import {
     HStack,
     LightMode,
     useDisclosure,
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuItem,
+    MenuItemOption,
+    MenuGroup,
+    MenuOptionGroup,
+    MenuDivider,
+    useToast,
 } from "@chakra-ui/react";
 import { FaAirbnb } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -12,8 +21,12 @@ import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import useMeUser from "../lib/useMeUser";
+import { getLogout } from "../api";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function Header() {
+    const queryClient = useQueryClient();
+    const toast = useToast();
     const { meLoading, meUser, isLoggedIn } = useMeUser();
     const {
         isOpen: isLoginOpen,
@@ -25,6 +38,23 @@ export default function Header() {
         onOpen: onSignupOpen,
         onClose: onSignupClose,
     } = useDisclosure();
+
+    const onLogout = async () => {
+        const toastId = toast({
+            title: "Loading...",
+            description: "It takes a few seconds...",
+            status: "loading",
+        });
+        await getLogout();
+        queryClient.refetchQueries(["me"]);
+        toast.update(toastId, {
+            title: "Log out",
+            duration: 4000,
+            description: "see you later!",
+            isClosable: true,
+            status: "success",
+        });
+    };
 
     return (
         <HStack
@@ -45,8 +75,15 @@ export default function Header() {
             </Link>
 
             {/* Buttons */}
-            {meLoading && isLoggedIn ? (
-                <Avatar src={meUser?.avatar} name={meUser?.username} />
+            {!meLoading && isLoggedIn ? (
+                <Menu>
+                    <MenuButton>
+                        <Avatar src={meUser?.avatar} name={meUser?.username} />
+                    </MenuButton>
+                    <MenuList onClick={onLogout}>
+                        <MenuItem>Log out</MenuItem>
+                    </MenuList>
+                </Menu>
             ) : (
                 <HStack display={{ base: "none", sm: "none", md: "flex" }}>
                     <ColorModeSwitcher />
