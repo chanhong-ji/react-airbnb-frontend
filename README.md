@@ -21,3 +21,7 @@
 - [x] Reviews
 - [x] Logout
 - [x] SocialLogin
+
+### Query & Mutation
+
+- [x] Password Login

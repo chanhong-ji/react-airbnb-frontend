@@ -1,3 +1,4 @@
+import { AxiosError, AxiosResponse } from "axios";
 export interface IRoomList {
     city: string;
     country: string;
@@ -60,4 +61,24 @@ export interface IMeUser {
     gender: string;
     language: string;
     currency: string;
+}
+
+export interface IPasswordLoginForm {
+    username: string;
+    password: string;
+}
+
+export interface IResponse extends AxiosResponse {
+    data: {
+        message?: string;
+    };
+}
+
+export interface IError extends AxiosError {
+    response: {
+        status: number;
+        data: {
+            message?: string;
+        };
+    };
 }

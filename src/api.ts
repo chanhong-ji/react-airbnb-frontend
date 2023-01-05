@@ -1,7 +1,8 @@
 import axios from "axios";
-import config from "./config";
-import { QueryFunctionContext } from "@tanstack/react-query";
 import Cookie from "js-cookie";
+import { QueryFunctionContext } from "@tanstack/react-query";
+import { IPasswordLoginForm } from "./types.d";
+import config from "./config";
 
 const instance = axios.create({
     baseURL: config.host.url,
@@ -77,3 +78,12 @@ export const getKakaoLogin = (code: string) =>
             const response = error.response;
             return { status: response.status, data: response.data };
         });
+
+export const getPasswordLogin = ({ username, password }: IPasswordLoginForm) =>
+    instance
+        .post(
+            "users/login",
+            { username, password },
+            { headers: { ...getCsrfHeader } }
+        )
+        .then((res) => res);
