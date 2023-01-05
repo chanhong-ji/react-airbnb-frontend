@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookie from "js-cookie";
 import { QueryFunctionContext } from "@tanstack/react-query";
-import { IPasswordLoginForm } from "./types.d";
+import { IPasswordLoginForm, IPasswordSignupForm } from "./types.d";
 import config from "./config";
 
 const instance = axios.create({
@@ -79,11 +79,20 @@ export const getKakaoLogin = (code: string) =>
             return { status: response.status, data: response.data };
         });
 
-export const getPasswordLogin = ({ username, password }: IPasswordLoginForm) =>
+export const getPasswordLogin = (data: IPasswordLoginForm) =>
+    instance
+        .post("users/login", data, { headers: { ...getCsrfHeader } })
+        .then((res) => res);
+
+export const getPasswordSignup = ({
+    username,
+    password,
+    email,
+}: IPasswordSignupForm) =>
     instance
         .post(
-            "users/login",
-            { username, password },
+            "users/",
+            { username, password, email },
             { headers: { ...getCsrfHeader } }
         )
         .then((res) => res);

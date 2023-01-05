@@ -25,3 +25,4 @@
 ### Query & Mutation
 
 - [x] Password Login
+- [x] Password Signup

@@ -68,6 +68,14 @@ export interface IPasswordLoginForm {
     password: string;
 }
 
+export interface IPasswordSignupForm {
+    email: string;
+    username: string;
+    password: string;
+    passwordConfirm: string;
+    result: string | null;
+}
+
 export interface IResponse extends AxiosResponse {
     data: {
         message?: string;
@@ -79,6 +87,16 @@ export interface IError extends AxiosError {
         status: number;
         data: {
             message?: string;
+        };
+    };
+}
+
+export interface ISignupError extends AxiosError {
+    response: {
+        status: number;
+        data: {
+            email?: string[];
+            username?: string[];
         };
     };
 }

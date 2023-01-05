@@ -12,11 +12,9 @@ import {
     ModalHeader,
     ModalOverlay,
     Text,
-    ToastId,
     useToast,
 } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { FaLock, FaUser } from "react-icons/fa";
 import { getPasswordLogin } from "../api";
@@ -30,20 +28,17 @@ interface ILoginProps {
 
 export default function LoginModal({ isOpen, onClose }: ILoginProps) {
     const toast = useToast();
-    const toastRef = useRef<ToastId>();
     const queryClient = useQueryClient();
     const mutation = useMutation<IResponse, IError, IPasswordLoginForm>(
         getPasswordLogin,
         {
             onSuccess: () => {
-                if (toastRef.current) {
-                    toast.update(toastRef.current, {
-                        title: "Login",
-                        description: "Welcome to come back",
-                        duration: 5000,
-                        status: "success",
-                    });
-                }
+                toast({
+                    title: "Login",
+                    description: "Welcome to come back",
+                    duration: 5000,
+                    status: "success",
+                });
                 queryClient.refetchQueries(["me"]);
                 reset();
                 onClose();
