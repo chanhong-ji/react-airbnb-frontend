@@ -26,3 +26,8 @@
 
 - [x] Password Login
 - [x] Password Signup
+
+### Hook
+
+- [x] useProtectedPage
+- [x] useHostOnlyPage

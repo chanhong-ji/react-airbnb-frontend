@@ -58,6 +58,7 @@ export interface IMeUser {
     email: string;
     name: string;
     avatar?: string;
+    is_host: boolean;
     gender: string;
     language: string;
     currency: string;

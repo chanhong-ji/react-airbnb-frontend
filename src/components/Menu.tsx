@@ -12,6 +12,7 @@ import { getLogout } from "../api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
 import { IMeUser } from "../types";
+import { Link } from "react-router-dom";
 
 export default function CMenu(user: IMeUser) {
     const queryClient = useQueryClient();
@@ -48,8 +49,11 @@ export default function CMenu(user: IMeUser) {
             <MenuButton>
                 <Avatar src={user?.avatar} name={user?.username} />
             </MenuButton>
-            <MenuList onClick={onLogout}>
-                <MenuItem>Log out</MenuItem>
+            <MenuList>
+                <MenuItem onClick={onLogout}>Log out</MenuItem>
+                <Link to={"rooms/upload"}>
+                    <MenuItem>Upload rooms</MenuItem>
+                </Link>
             </MenuList>
         </Menu>
     );
