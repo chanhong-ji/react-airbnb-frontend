@@ -21,8 +21,7 @@ import { IPasswordSignupForm, ISignupError } from "../types";
 import SocialLogin from "./SocialLogin";
 import { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { getPasswordSignup } from "../api";
-import { useNavigate } from "react-router-dom";
+import { postPasswordSignup } from "../api";
 
 interface ISignupProps {
     isOpen: boolean;
@@ -61,7 +60,7 @@ export default function SignupModal({ isOpen, onClose }: ISignupProps) {
     const watchPasswordConfirm = watch(["password", "passwordConfirm"]);
     const toast = useToast();
 
-    const mutation = useMutation<any, ISignupError, any>(getPasswordSignup, {
+    const mutation = useMutation<any, ISignupError, any>(postPasswordSignup, {
         onSuccess() {
             toast({
                 title: "Sign up",

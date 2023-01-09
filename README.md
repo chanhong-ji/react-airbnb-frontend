@@ -11,7 +11,8 @@
 
 - [x] Home
 - [x] RoomDetail
-- [x] SocialConfirm page
+- [x] SocialConfirm
+- [x] UploadRoom
 
 ### Component
 
@@ -21,11 +22,6 @@
 - [x] Reviews
 - [x] Logout
 - [x] SocialLogin
-
-### Query & Mutation
-
-- [x] Password Login
-- [x] Password Signup
 
 ### Hook
 

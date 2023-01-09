@@ -17,7 +17,7 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { FaLock, FaUser } from "react-icons/fa";
-import { getPasswordLogin } from "../api";
+import { postPasswordLogin } from "../api";
 import { IError, IPasswordLoginForm, IResponse } from "../types";
 import SocialLogin from "./SocialLogin";
 
@@ -30,7 +30,7 @@ export default function LoginModal({ isOpen, onClose }: ILoginProps) {
     const toast = useToast();
     const queryClient = useQueryClient();
     const mutation = useMutation<IResponse, IError, IPasswordLoginForm>(
-        getPasswordLogin,
+        postPasswordLogin,
         {
             onSuccess: () => {
                 toast({

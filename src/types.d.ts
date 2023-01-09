@@ -49,7 +49,7 @@ export interface IPublicUser {
 export interface IReview {
     payload: string;
     rating: number;
-    user: IPublicUser;
+    user: IPublicUser | null;
     created_at: string;
 }
 
@@ -100,4 +100,35 @@ export interface ISignupError extends AxiosError {
             username?: string[];
         };
     };
+}
+
+export interface ICategory {
+    pk: number;
+    name: string;
+}
+
+export interface IAmenity {
+    pk: number;
+    name: string;
+    description?: string;
+}
+
+export type IPhotos = Array<File | undefined | string>;
+
+export interface ICreateRoom {
+    name: string;
+    address: string;
+    descriptions: string;
+    category: number;
+    kind: string;
+    country: string;
+    city: string;
+    price: number;
+    rooms: number;
+    toilets: number;
+    pet_friendly: boolean;
+    amenities: number[];
+    check_in_time: string;
+    check_out_time: string;
+    photos: IPhotos;
 }

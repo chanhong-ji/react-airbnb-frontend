@@ -8,7 +8,7 @@ import {
     ToastId,
 } from "@chakra-ui/react";
 
-import { getLogout } from "../api";
+import { Logout } from "../api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
 import { IMeUser } from "../types";
@@ -18,7 +18,7 @@ export default function CMenu(user: IMeUser) {
     const queryClient = useQueryClient();
     const toast = useToast();
     const toastRef = useRef<ToastId>();
-    const mutation = useMutation(getLogout, {
+    const mutation = useMutation(Logout, {
         onMutate: () => {
             toastRef.current = toast({
                 title: "Loading...",

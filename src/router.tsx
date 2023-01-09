@@ -15,7 +15,10 @@ export const router = createBrowserRouter(
             errorElement: <ErrorPage />,
             children: [
                 { path: "", element: <Home /> },
-                { path: "rooms/upload", element: <UploadRoom /> },
+                {
+                    path: "rooms/upload",
+                    element: <UploadRoom />,
+                },
                 { path: "rooms/:roomPk", element: <RoomDetail /> },
                 {
                     path: "social",
