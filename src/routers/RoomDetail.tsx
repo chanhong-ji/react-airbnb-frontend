@@ -18,6 +18,7 @@ import { getRoom } from "../api";
 import { IRoom } from "../types";
 import { FaStar } from "react-icons/fa";
 import Reviews from "../components/Reviews";
+import BookingCalendar from "../components/BookingCalendar";
 
 export default function Room() {
     const { roomPk } = useParams();
@@ -99,24 +100,30 @@ export default function Room() {
                     </Grid>
 
                     {/* Info */}
-                    <HStack w="full" px={1} py={5}>
-                        <SimpleGrid column={1} mr={40}>
-                            <Heading fontSize={"xl"}>
-                                {room.owner.username}님이 호스팅하는 펜션
-                            </Heading>
-                            <HStack mt={1.5} fontSize={"sm"}>
-                                <Text>최대인원 x명</Text>
-                                <span aria-hidden="true">·</span>
-                                <Text>방 {room.rooms}개</Text>
-                                <span aria-hidden="true">·</span>
-                                <Text>욕실 {room.toilets}개</Text>
+                    <Grid templateColumns={"2fr 1fr"} columnGap={10} pt={4}>
+                        <Box>
+                            <HStack px={1} py={5} justify={"space-between"}>
+                                <SimpleGrid column={1}>
+                                    <Heading fontSize={"xl"}>
+                                        {room.owner.username}님이 호스팅하는
+                                        펜션
+                                    </Heading>
+                                    <HStack mt={1.5} fontSize={"sm"}>
+                                        <Text>최대인원 x명</Text>
+                                        <span aria-hidden="true">·</span>
+                                        <Text>방 {room.rooms}개</Text>
+                                        <span aria-hidden="true">·</span>
+                                        <Text>욕실 {room.toilets}개</Text>
+                                    </HStack>
+                                </SimpleGrid>
+                                <Avatar
+                                    name={room.owner.username}
+                                    src={room.owner.avatar}
+                                />
                             </HStack>
-                        </SimpleGrid>
-                        <Avatar
-                            name={room.owner.username}
-                            src={room.owner.avatar}
-                        />
-                    </HStack>
+                        </Box>
+                        <BookingCalendar />
+                    </Grid>
 
                     {/* Reviews */}
                     <Divider />

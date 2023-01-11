@@ -132,3 +132,10 @@ export interface ICreateRoom {
     check_out_time: string;
     photos: IPhotos;
 }
+
+export interface IBooking {
+    roomPk: string;
+    guests: number;
+    check_in: string;
+    check_out: string;
+}

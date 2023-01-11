@@ -2,6 +2,7 @@ import axios from "axios";
 import Cookie from "js-cookie";
 import { QueryFunctionContext } from "@tanstack/react-query";
 import {
+    IBooking,
     ICreateRoom,
     IPasswordLoginForm,
     IPasswordSignupForm,
@@ -149,6 +150,27 @@ export const postRooms = ({
         .post(
             "rooms/",
             { ...form, photos: pks },
+            { headers: { ...getCsrfHeader() } }
+        )
+        .then((res) => res.data);
+
+export const getRoomBookingCheck = ({ queryKey }: QueryFunctionContext) => {
+    const [_, roomPk] = queryKey;
+    return instance
+        .get(`rooms/${roomPk}/bookings/check`)
+        .then((res) => res.data);
+};
+
+export const postBooking = ({
+    roomPk,
+    guests,
+    check_in,
+    check_out,
+}: IBooking) =>
+    instance
+        .post(
+            `rooms/${roomPk}/bookings`,
+            { guests, check_in, check_out },
             { headers: { ...getCsrfHeader() } }
         )
         .then((res) => res.data);
