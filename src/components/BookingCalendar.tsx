@@ -1,5 +1,6 @@
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import "../css/calendar.css";
 import { useState, useEffect } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";

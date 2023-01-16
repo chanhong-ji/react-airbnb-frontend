@@ -100,7 +100,7 @@ export default function Room() {
                     </Grid>
 
                     {/* Info */}
-                    <Grid templateColumns={"2fr 1fr"} columnGap={10} pt={4}>
+                    <Grid templateColumns={"5fr 3fr"} columnGap={10} pt={4}>
                         <Box>
                             <HStack px={1} py={5} justify={"space-between"}>
                                 <SimpleGrid column={1}>
