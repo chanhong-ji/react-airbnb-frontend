@@ -122,7 +122,10 @@ export default function Room() {
                                 />
                             </HStack>
                         </Box>
-                        <BookingCalendar />
+                        <BookingCalendar
+                            booked={room.booked}
+                            checkInDisable={room.check_in_disable}
+                        />
                     </Grid>
 
                     {/* Reviews */}

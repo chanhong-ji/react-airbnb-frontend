@@ -1,10 +1,11 @@
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { getRoomBookingCheck, postBooking } from "../api";
+import { getCheckBooking, postBooking } from "../api";
 import {
+    Box,
     Button,
     Grid,
     InputGroup,
@@ -14,38 +15,65 @@ import {
     NumberInput,
     NumberInputField,
     NumberInputStepper,
+    Text,
     useToast,
+    VStack,
 } from "@chakra-ui/react";
 import { FaUser } from "react-icons/fa";
 import { formatDate } from "../lib/utils";
 
-export default function BookingCalendar() {
+interface BookingCalendarProps {
+    booked: string[];
+    checkInDisable: string[];
+}
+
+export default function BookingCalendar({
+    booked,
+    checkInDisable,
+}: BookingCalendarProps) {
     const { roomPk } = useParams();
     const [dates, setDates] = useState<Date[]>();
-    const [disableDates, setDisableDates] = useState<string[]>();
+    const [disableDates, setDisableDates] = useState<string[]>(
+        booked.map((date) => new Date(date).toLocaleDateString())
+    );
+    const [checkInDisableDates, setCheckInDisableDates] = useState(
+        checkInDisable.map((date) => new Date(date).toLocaleDateString())
+    );
     const [guests, setGuests] = useState(1);
-    const navigate = useNavigate();
+    const [message, setMessage] = useState("");
     const toast = useToast();
+    const navigate = useNavigate();
 
-    const { isLoading } = useQuery(["check", roomPk], getRoomBookingCheck, {
-        onSuccess(data: string[]) {
-            setDisableDates(
-                data.map((date) => new Date(date).toLocaleDateString())
-            );
-        },
-        cacheTime: 0,
-    });
+    const { isLoading, data: isPossible } = useQuery(
+        ["check", roomPk, dates],
+        getCheckBooking,
+        {
+            cacheTime: 0,
+            enabled:
+                dates &&
+                dates.length >= 2 &&
+                dates[0].toLocaleDateString() !== dates[1].toLocaleDateString(),
+            onSuccess(result) {
+                if (result) {
+                    setMessage("해당 날짜는 예약이 가능합니다");
+                } else {
+                    setMessage("해당 날짜는 예약이 불가능합니다");
+                }
+            },
+        }
+    );
 
-    const mutation = useMutation(postBooking, {
-        onSuccess({ pk }) {
+    const postBookingMutation = useMutation(postBooking, {
+        onSuccess(data) {
+            console.log(data, ":post booking returned data");
             toast({ status: "success", description: "Booking success" });
             // navigate booking detail page
         },
     });
 
     const onSubmit = () => {
-        if (roomPk && dates && dates?.length >= 2) {
-            mutation.mutate({
+        if (roomPk && dates && isPossible) {
+            postBookingMutation.mutate({
                 roomPk,
                 guests,
                 check_in: formatDate(dates[0]),
@@ -54,9 +82,19 @@ export default function BookingCalendar() {
         }
     };
 
+    useEffect(() => {
+        if (dates) {
+            setMessage("");
+            const checkInDate = dates[0].toLocaleDateString();
+            if (checkInDisableDates.includes(checkInDate)) {
+                setMessage("해당날짜는 체크인이 불가능합니다");
+            }
+        }
+    }, [dates]);
+
     return (
         <div>
-            {!isLoading && disableDates && (
+            {disableDates && (
                 <>
                     <Calendar
                         onChange={setDates}
@@ -73,8 +111,48 @@ export default function BookingCalendar() {
                                 date.toLocaleDateString()
                             );
                         }}
+                        returnValue={"range"}
                         allowPartialRange={true}
                     />
+                    <Box height={6} mt={2}>
+                        <Text
+                            color={"red.400"}
+                            textAlign={"center"}
+                            fontSize={"sm"}
+                            fontWeight="semibold"
+                        >
+                            {message}
+                        </Text>
+                    </Box>
+                    <Grid
+                        mt={1}
+                        p={2}
+                        templateColumns={"1fr 1fr"}
+                        bg="whitesmoke"
+                        borderRadius={10}
+                        fontSize="sm"
+                    >
+                        <VStack>
+                            <Text color={"gray"} fontWeight={"bold"}>
+                                Check In Date
+                            </Text>
+                            {dates && (
+                                <Text>{dates[0].toLocaleDateString()}</Text>
+                            )}
+                        </VStack>
+                        <VStack>
+                            <Text color={"gray"} fontWeight={"bold"}>
+                                Check Out Date
+                            </Text>
+                            {dates &&
+                                dates.length >= 2 &&
+                                dates[0].toLocaleDateString() !==
+                                    dates[1].toLocaleDateString() && (
+                                    <Text>{dates[1].toLocaleDateString()}</Text>
+                                )}
+                        </VStack>
+                    </Grid>
+
                     <Grid mt={"4"} templateColumns={"1fr 2fr"} gap={4}>
                         <InputGroup>
                             <InputLeftAddon children={<FaUser />} />
@@ -94,9 +172,9 @@ export default function BookingCalendar() {
                         </InputGroup>
                         <Button
                             colorScheme="red"
-                            isDisabled={!!!dates || dates.length < 2}
+                            isDisabled={isLoading || !isPossible}
                             onClick={onSubmit}
-                            isLoading={mutation.isLoading}
+                            isLoading={postBookingMutation.isLoading}
                         >
                             Make booking
                         </Button>

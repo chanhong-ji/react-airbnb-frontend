@@ -32,6 +32,8 @@ export interface IRoom {
     check_in_time: string;
     check_out_time: string;
     photos: IPhoto[];
+    booked: string[];
+    check_in_disable: string[];
 }
 
 export interface IPhoto {
@@ -139,3 +141,5 @@ export interface IBooking {
     check_in: string;
     check_out: string;
 }
+
+export type IBookingCheck = [string, string?, Date[]?];

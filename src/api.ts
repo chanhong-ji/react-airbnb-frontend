@@ -3,12 +3,14 @@ import Cookie from "js-cookie";
 import { QueryFunctionContext } from "@tanstack/react-query";
 import {
     IBooking,
+    IBookingCheck,
     ICreateRoom,
     IPasswordLoginForm,
     IPasswordSignupForm,
     IPhotos,
 } from "./types.d";
 import config from "./config";
+import { formatDate } from "./lib/utils";
 
 const instance = axios.create({
     baseURL: config.host.url,
@@ -154,13 +156,6 @@ export const postRooms = ({
         )
         .then((res) => res.data);
 
-export const getRoomBookingCheck = ({ queryKey }: QueryFunctionContext) => {
-    const [_, roomPk] = queryKey;
-    return instance
-        .get(`rooms/${roomPk}/bookings/check`)
-        .then((res) => res.data);
-};
-
 export const postBooking = ({
     roomPk,
     guests,
@@ -174,3 +169,27 @@ export const postBooking = ({
             { headers: { ...getCsrfHeader() } }
         )
         .then((res) => res.data);
+
+export const getCheckBooking = ({
+    queryKey,
+}: QueryFunctionContext<IBookingCheck>) => {
+    const [_, roomPk, dates] = queryKey;
+    if (dates) {
+        const checkIn = dates[0];
+        const checkOut = dates[1];
+        return instance
+            .get(
+                `rooms/${roomPk}/bookings/check?check_in=${formatDate(
+                    checkIn
+                )}&check_out=${formatDate(checkOut)}`
+            )
+            .then((res) => res.data)
+            .catch(console.error);
+    }
+};
+
+const getNextDate = (date: Date) => {
+    let result = new Date();
+    result.setDate(date.getDate() + 1);
+    return result;
+};
