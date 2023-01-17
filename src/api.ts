@@ -170,7 +170,7 @@ export const postBooking = ({
         )
         .then((res) => res.data);
 
-export const getCheckBooking = ({
+export const getBookingCheck = ({
     queryKey,
 }: QueryFunctionContext<IBookingCheck>) => {
     const [_, roomPk, dates] = queryKey;
@@ -188,8 +188,10 @@ export const getCheckBooking = ({
     }
 };
 
-const getNextDate = (date: Date) => {
-    let result = new Date();
-    result.setDate(date.getDate() + 1);
-    return result;
-};
+export const getBookings = () =>
+    instance.get("bookings").then((result) => result.data);
+
+export const deleteBooking = (pk: number) =>
+    instance
+        .delete(`bookings/${pk}`, { headers: { ...getCsrfHeader() } })
+        .then((result) => result.data);

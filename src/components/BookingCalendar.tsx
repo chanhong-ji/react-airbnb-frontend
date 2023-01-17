@@ -2,9 +2,9 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "../css/calendar.css";
 import { useState, useEffect } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCheckBooking, postBooking } from "../api";
+import { getBookingCheck, postBooking } from "../api";
 import {
     Box,
     Button,
@@ -23,39 +23,39 @@ import {
 import { FaUser } from "react-icons/fa";
 import { formatDate } from "../lib/utils";
 
-interface BookingCalendarProps {
+interface Props {
     booked: string[];
     checkInDisable: string[];
 }
 
-export default function BookingCalendar({
-    booked,
-    checkInDisable,
-}: BookingCalendarProps) {
+export default function BookingCalendar({ booked, checkInDisable }: Props) {
     const { roomPk } = useParams();
     const [dates, setDates] = useState<Date[]>();
-    const [disableDates, setDisableDates] = useState<string[]>(
+    const [disableDates] = useState<string[]>(
         booked.map((date) => new Date(date).toLocaleDateString())
     );
-    const [checkInDisableDates, setCheckInDisableDates] = useState(
+    const [checkInDisableDates] = useState(
         checkInDisable.map((date) => new Date(date).toLocaleDateString())
     );
     const [guests, setGuests] = useState(1);
     const [message, setMessage] = useState("");
     const toast = useToast();
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
+
+    const bookingEnableConditions =
+        dates &&
+        dates.length >= 2 &&
+        dates[0].toLocaleDateString() !== dates[1].toLocaleDateString();
 
     const { isLoading, data: isPossible } = useQuery(
         ["check", roomPk, dates],
-        getCheckBooking,
+        getBookingCheck,
         {
             cacheTime: 0,
-            enabled:
-                dates &&
-                dates.length >= 2 &&
-                dates[0].toLocaleDateString() !== dates[1].toLocaleDateString(),
+            enabled: bookingEnableConditions,
             onSuccess(result) {
-                if (result) {
+                if (result === true) {
                     setMessage("해당 날짜는 예약이 가능합니다");
                 } else {
                     setMessage("해당 날짜는 예약이 불가능합니다");
@@ -65,10 +65,10 @@ export default function BookingCalendar({
     );
 
     const postBookingMutation = useMutation(postBooking, {
-        onSuccess(data) {
-            console.log(data, ":post booking returned data");
+        onSuccess() {
             toast({ status: "success", description: "Booking success" });
-            // navigate booking detail page
+            navigate(`/bookings`);
+            queryClient.refetchQueries([`room:${roomPk}`, roomPk]);
         },
     });
 
@@ -145,12 +145,9 @@ export default function BookingCalendar({
                             <Text color={"gray"} fontWeight={"bold"}>
                                 Check Out Date
                             </Text>
-                            {dates &&
-                                dates.length >= 2 &&
-                                dates[0].toLocaleDateString() !==
-                                    dates[1].toLocaleDateString() && (
-                                    <Text>{dates[1].toLocaleDateString()}</Text>
-                                )}
+                            {bookingEnableConditions && (
+                                <Text>{dates[1].toLocaleDateString()}</Text>
+                            )}
                         </VStack>
                     </Grid>
 

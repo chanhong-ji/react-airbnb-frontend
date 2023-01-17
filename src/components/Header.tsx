@@ -36,6 +36,8 @@ export default function Header() {
             borderBottomWidth={1}
             top={-1}
             left={-1}
+            zIndex={1}
+            bg="inherit"
         >
             {/* Logo */}
             <Link to={"/"}>

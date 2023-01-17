@@ -143,3 +143,19 @@ export interface IBooking {
 }
 
 export type IBookingCheck = [string, string?, Date[]?];
+
+type bookingKind = "experience" | "room";
+
+export interface IBookingDetail {
+    id: number;
+    updated_at: string;
+    kind: bookingKind;
+    check_in: string | null;
+    check_out: string | null;
+    experience_date: string | null;
+    guests: string;
+    user: number;
+    room: IRoomList | null;
+    experience: IExperienceList | null;
+    photo: string;
+}

@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import Root from "./components/Root";
+import Bookings from "./routers/Bookings";
 import ErrorPage from "./routers/ErrorPage";
 import GithubConfirm from "./routers/GithubConfirm";
 import Home from "./routers/Home";
@@ -15,6 +16,7 @@ export const router = createBrowserRouter(
             errorElement: <ErrorPage />,
             children: [
                 { path: "", element: <Home /> },
+                { path: "bookings", element: <Bookings /> },
                 {
                     path: "rooms/upload",
                     element: <UploadRoom />,

@@ -7,7 +7,6 @@ import {
     useToast,
     ToastId,
 } from "@chakra-ui/react";
-
 import { Logout } from "../api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
@@ -51,6 +50,9 @@ export default function CMenu(user: IMeUser) {
             </MenuButton>
             <MenuList>
                 <MenuItem onClick={onLogout}>Log out</MenuItem>
+                <Link to={"bookings"}>
+                    <MenuItem>My Bookings</MenuItem>
+                </Link>
                 <Link to={"rooms/upload"}>
                     <MenuItem>Upload rooms</MenuItem>
                 </Link>
