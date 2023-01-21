@@ -26,7 +26,7 @@ export default function Review({ payload, rating, user, created_at }: IReview) {
             </HStack>
 
             {/* Payload */}
-            <Text noOfLines={3} overflow="hidden" maxH={70} fontSize={"sm"}>
+            <Text overflow="hidden" fontSize={"sm"}>
                 {payload}
             </Text>
         </Grid>

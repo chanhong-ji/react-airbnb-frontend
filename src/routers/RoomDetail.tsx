@@ -12,7 +12,7 @@ import {
     Text,
     VStack,
 } from "@chakra-ui/react";
-import { Link, useParams } from "react-router-dom";
+import { Link, Outlet, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getRoom } from "../api";
 import { IRoom } from "../types";
@@ -26,10 +26,11 @@ export default function Room() {
         [`room:${roomPk}`, roomPk],
         getRoom
     );
+    const pageLoadingConditions = !isLoading && roomPk && room;
 
     return (
-        <VStack w={"53vw"}>
-            {!isLoading && room && (
+        <VStack w={"53vw"} pb={32}>
+            {pageLoadingConditions && (
                 <>
                     {/* Title */}
                     <SimpleGrid row={2} py={4} px={3} width="full">
@@ -127,10 +128,17 @@ export default function Room() {
                             checkInDisable={room.check_in_disable}
                         />
                     </Grid>
+                    <Outlet />
 
                     {/* Reviews */}
                     <Divider />
-                    <Reviews owner={room.owner} rating={room.rating} />
+
+                    {/* Reviews Summary */}
+                    <Reviews
+                        roomPk={roomPk}
+                        rating={room.rating}
+                        totalReviews={room.total_reviews}
+                    />
                 </>
             )}
         </VStack>

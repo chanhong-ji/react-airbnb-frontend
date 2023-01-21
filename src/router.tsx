@@ -21,7 +21,10 @@ export const router = createBrowserRouter(
                     path: "rooms/upload",
                     element: <UploadRoom />,
                 },
-                { path: "rooms/:roomPk", element: <RoomDetail /> },
+                {
+                    path: "rooms/:roomPk",
+                    element: <RoomDetail />,
+                },
                 {
                     path: "social",
                     children: [

@@ -34,6 +34,7 @@ export interface IRoom {
     photos: IPhoto[];
     booked: string[];
     check_in_disable: string[];
+    total_reviews: number;
 }
 
 export interface IPhoto {
@@ -53,6 +54,7 @@ export interface IReview {
     rating: number;
     user: IPublicUser | null;
     created_at: string;
+    pk: number;
 }
 
 export interface IMeUser {

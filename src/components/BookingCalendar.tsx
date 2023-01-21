@@ -53,7 +53,7 @@ export default function BookingCalendar({ booked, checkInDisable }: Props) {
         getBookingCheck,
         {
             cacheTime: 0,
-            enabled: bookingEnableConditions,
+            enabled: !!bookingEnableConditions,
             onSuccess(result) {
                 if (result === true) {
                     setMessage("해당 날짜는 예약이 가능합니다");
